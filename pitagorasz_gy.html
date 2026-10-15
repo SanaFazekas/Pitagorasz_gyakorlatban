@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pitagorasz-tétele - Szöveges feladatok</title>
+  <style>
+    :root {
+      --primary: #2b5c8f;
+      --primary-hover: #1d4066;
+      --bg-color: #f4f7f9;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --border: #dcdfe6;
+      --success: #2e7d32;
+      --success-bg: #e8f5e9;
+      --error: #c62828;
+      --error-bg: #ffebee;
+      --accent: #f57c00;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text);
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-container {
+      max-width: 1000px;
+      width: 100%;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      padding: 25px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+      border-bottom: 2px solid var(--bg-color);
+      padding-bottom: 15px;
+    }
+
+    header h1 {
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+
+    header p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 25px;
+    }
+
+    @media (max-width: 768px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: #fafbfc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .panel h2 {
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 5px;
+    }
+
+    .form-group input[type="text"], 
+    .form-group input[type="number"], 
+    .form-group select {
+      width: 100%;
+      padding: 9px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .root-hint {
+      font-size: 0.78rem;
+      color: #666;
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    .workspace {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .task-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      background: #fff;
+    }
+
+    .task-progress {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .task-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+
+    .task-description {
+      font-size: 1.05rem;
+      margin-bottom: 20px;
+      line-height: 1.5;
+      background: #f9fbfd;
+      padding: 15px;
+      border-left: 4px solid var(--primary);
+      border-radius: 4px;
+    }
+
+    .inputs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .input-box label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .input-with-unit {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .input-with-unit input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .input-with-unit select {
+      width: 75px;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .root-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .root-input-wrapper input {
+      width: 50px !important;
+      text-align: center;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #1b5e20; }
+
+    .btn-secondary { background: #6c757d; color: white; }
+    .btn-secondary:hover { background: #5a6268; }
+
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: #333; }
+    .btn-outline:hover { background: #e9ecef; }
+
+    .feedback {
+      padding: 15px;
+      border-radius: 6px;
+      display: none;
+      margin-top: 15px;
+    }
+
+    .feedback.success {
+      display: block;
+      background: var(--success-bg);
+      border: 1px solid var(--success);
+      color: var(--success);
+    }
+
+    .feedback.error {
+      display: block;
+      background: var(--error-bg);
+      border: 1px solid var(--error);
+      color: var(--error);
+    }
+
+    .solution-steps {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #333;
+      background: rgba(255,255,255,0.7);
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      max-width: 800px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .history-table th, .history-table td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .history-table th {
+      background: #f4f7f9;
+    }
+
+    .tag-success { color: var(--success); font-weight: bold; }
+    .tag-error { color: var(--error); font-weight: bold; }
+
+    .summary-box {
+      background: #f8f9fa;
+      border: 1px solid var(--border);
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .summary-box h3 {
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #printableArea, #printableArea * { visibility: visible; }
+      #printableArea { position: absolute; left: 0; top: 0; width: 100%; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <header>
+    <h1>Pitagorasz-tétele - Szöveges feladatok</h1>
+    <p>Interaktív feladatgeneráló gyakorláshoz és teszteléshez</p>
+  </header>
+
+  <div class="main-grid">
+    <aside class="panel">
+      <div>
+        <h2>Beállítások</h2>
+
+        <div class="form-group">
+          <label for="studentName">Tanuló neve:</label>
+          <input type="text" id="studentName" placeholder="Pl. Kovács Péter">
+        </div>
+
+        <div class="form-group">
+          <label for="workMode">Működési mód:</label>
+          <select id="workMode">
+            <option value="practice">Gyakorlás (azonnali ellenőrzés)</option>
+            <option value="test">Teszt (sorozat végén értékelés)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="calcGoal">Keresett érték:</label>
+          <select id="calcGoal">
+            <option value="random">Vegyes (Befogó vagy Átfogó)</option>
+            <option value="hypotenuse">Átfogó számítása</option>
+            <option value="leg">Befogó számítása</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="taskCount">Feladatok száma:</label>
+          <select id="taskCount">
+            <option value="6">6 feladat</option>
+            <option value="8">8 feladat</option>
+            <option value="10" selected>10 feladat</option>
+            <option value="12">12 feladat</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="useRootFormat" onchange="updateTaskInputFormat()"> Gyökös kiírás / pontos alak (pl. a√b)
+          </label>
+          <div class="root-hint">(egész szám esetén írd a gyök alá az 1-est)</div>
+        </div>
+
+        <div class="button-group" style="flex-direction: column;">
+          <button class="btn-primary" onclick="startSession()">Új feladatsor indítása</button>
+          <button class="btn-secondary" onclick="openHistoryModal()">PDF nyomtatás / Eredmények</button>
+          <button class="btn-outline" onclick="openHistoryModal()">Eredmények áttekintése</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <div class="task-card" id="taskCardContainer">
+        <div class="task-progress" id="taskProgressText"></div>
+        <div class="task-title" id="taskTitle">Feladat</div>
+        <div class="task-description" id="taskText">Kattints az "Új feladatsor indítása" gombra a gyakorlás megkezdéséhez!</div>
+        
+        <div class="inputs-grid" id="inputsGrid"></div>
+
+        <div class="button-group" id="actionButtonGroup" style="margin-top: 20px; display:none;">
+          <button class="btn-success" id="submitBtn" onclick="submitCurrentAnswer()">Válasz ellenőrzése</button>
+          <button class="btn-primary" id="nextBtn" onclick="nextTask()" style="display:none;">Következő feladat ➔</button>
+        </div>
+
+        <div id="feedback" class="feedback"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div id="historyModal" class="modal">
+  <div class="modal-content" id="printableArea">
+    <div class="modal-header">
+      <h2 id="modalStudentName">Feladatsor eredményei</h2>
+      <button class="btn-outline no-print" onclick="closeHistoryModal()">✕</button>
+    </div>
+    
+    <div id="summaryContainer"></div>
+    <div id="historyListContainer"></div>
+
+    <div class="button-group no-print" style="margin-top: 20px; justify-content: flex-end;">
+      <button class="btn-primary" onclick="window.print()">Nyomtatás / PDF mentése</button>
+      <button class="btn-secondary" onclick="closeHistoryModal()">Bezárás</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let sessionTasks = [];
+  let currentIndex = 0;
+  let sessionActive = false;
+  const lengthUnits = { 'mm': 0.1, 'cm': 1, 'dm': 10, 'm': 100 };
+
+  const wordProblemTemplates = [
+    {
+      type: 'hypotenuse',
+      templates: [
+        (a, b, u) => `Egy téglalap alakú kert oldalai ${a} ${u} és ${b} ${u} hosszúak. Mekkora utat tesz meg az a hangya, amelyik a kert egyik sarkából átlósan a ellenkező sarokba gyalogol?`,
+        (a, b, u) => `Egy ${a} ${u} magas függőleges oszlop tetejétől a talajon lévő, az oszlop tőjétől ${b} ${u}-re lévő pontig feszítünk ki egy acélkábelt. Milyen hosszú a kábel?`,
+        (a, b, u) => `Egy ${a} ${u} hosszúságú létra úgy van támasztva a falhoz, hogy az alja ${b} ${u}-re van a faltól. Milyen magasan éri el a létra teteje a falat?`
+      ]
+    },
+    {
+      type: 'leg',
+      templates: [
+        (c, a, u) => `Egy ${c} ${u} hosszúságú létra a falnak támasztva ${a} ${u} magasságot ér el a falon. Milyen messze van a létra alja a faltól?`,
+        (c, a, u) => `Egy derékszögű háromszög alakú park átlója (átfogója) ${c} ${u}, az egyik oldala ${a} ${u}. Mekkora a park másik oldala?`,
+        (c, a, u) => `Egy ${c} ${u} átlójú téglalap egyik oldala ${a} ${u}. Mekkora a téglalap másik oldala?`
+      ]
+    }
+  ];
+
+  const pythagoreanTriplets = [
+    [3, 4, 5], [6, 8, 10], [5, 12, 13], [9, 12, 15], 
+    [8, 15, 17], [10, 24, 26], [12, 16, 20], [15, 20, 25]
+  ];
+
+  function getRandomArrayElement(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function startSession() {
+    const count = parseInt(document.getElementById('taskCount').value);
+    const goal = document.getElementById('calcGoal').value;
+    
+    sessionTasks = [];
+    currentIndex = 0;
+    sessionActive = true;
+
+    for (let i = 0; i < count; i++) {
+      sessionTasks.push(generateWordProblem(goal, i + 1));
+    }
+
+    document.getElementById('actionButtonGroup').style.display = 'flex';
+    document.getElementById('submitBtn').style.display = 'inline-block';
+    document.getElementById('nextBtn').style.display = 'none';
+    renderCurrentTask();
+  }
+
+  function generateWordProblem(goal, index) {
+    let taskType = goal;
+    if (taskType === 'random') {
+      taskType = Math.random() > 0.5 ? 'hypotenuse' : 'leg';
+    }
+
+    let u = getRandomArrayElement(['cm', 'dm', 'm']);
+    let triplet = getRandomArrayElement(pythagoreanTriplets);
+    let text = "";
+    let targetKey = "";
+    let exactVal = 0;
+
+    if (taskType === 'hypotenuse') {
+      let a = triplet[0], b = triplet[1], c = triplet[2];
+      let templateFunc = getRandomArrayElement(wordProblemTemplates[0].templates);
+      text = templateFunc(a, b, u);
+      targetKey = 'c';
+      exactVal = c;
+    } else {
+      let a = triplet[0], b = triplet[1], c = triplet[2];
+      let templateFunc = getRandomArrayElement(wordProblemTemplates[1].templates);
+      text = templateFunc(c, a, u);
+      targetKey = 'x';
+      exactVal = b;
+    }
+
+    return {
+      id: index,
+      text: text,
+      targetKey: targetKey,
+      solutionRaw: { exact: exactVal, unit: u },
+      steps: `A Pitagorasz-tétel alkalmazásával a keresett érték: <strong>${exactVal} ${u}</strong>`,
+      userAnswer: null,
+      isCorrect: false,
+      answered: false
+    };
+  }
+
+  function renderCurrentTask() {
+    if (!sessionActive || sessionTasks.length === 0) return;
+
+    const task = sessionTasks[currentIndex];
+    const total = sessionTasks.length;
+
+    document.getElementById('taskProgressText').innerText = `${task.id}. feladat / ${total} (Aktuális: ${currentIndex + 1}/${total})`;
+    document.getElementById('taskTitle').innerText = `Szöveges feladat #${task.id}`;
+    document.getElementById('taskText').innerText = task.text;
+
+    const inputsGrid = document.getElementById('inputsGrid');
+    inputsGrid.innerHTML = '';
+    const useRoot = document.getElementById('useRootFormat').checked;
+
+    const box = document.createElement('div');
+    box.className = 'input-box';
+
+    const label = document.createElement('label');
+    label.innerText = `Keresett érték (${task.targetKey}):`;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'input-with-unit';
+
+    if (useRoot) {
+      const rootDiv = document.createElement('div');
+      rootDiv.className = 'root-input-wrapper';
+
+      const coeffInput = document.createElement('input');
+      coeffInput.type = 'number';
+      coeffInput.step = 'any';
+      coeffInput.id = `input_val_coeff`;
+      coeffInput.value = task.userAnswer ? task.userAnswer.coeff : '';
+      coeffInput.placeholder = '1';
+
+      const rootSign = document.createElement('span');
+      rootSign.innerHTML = '√';
+      rootSign.style.fontWeight = 'bold';
+
+      const underRootInput = document.createElement('input');
+      underRootInput.type = 'number';
+      underRootInput.step = 'any';
+      underRootInput.id = `input_val_root`;
+      underRootInput.value = task.userAnswer ? task.userAnswer.root : '';
+      underRootInput.placeholder = 'szám';
+
+      rootDiv.appendChild(coeffInput);
+      rootDiv.appendChild(rootSign);
+      rootDiv.appendChild(underRootInput);
+      wrap.appendChild(rootDiv);
+    } else {
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.step = 'any';
+      input.id = `input_val`;
+      input.value = task.userAnswer ? task.userAnswer.val : '';
+      input.placeholder = 'Érték...';
+      wrap.appendChild(input);
+    }
+
+    const select = document.createElement('select');
+    select.id = `input_unit`;
+    ['cm', 'dm', 'm', 'mm'].forEach(u => {
+      const opt = document.createElement('option');
+      opt.value = u;
+      opt.innerText = u;
+      if (task.userAnswer && task.userAnswer.unit === u) opt.selected = true;
+      select.appendChild(opt);
+    });
+
+    wrap.appendChild(select);
+    box.appendChild(label);
+    box.appendChild(wrap);
+    inputsGrid.appendChild(box);
+
+    const fb = document.getElementById('feedback');
+    fb.className = 'feedback';
+    fb.innerHTML = '';
+
+    const mode = document.getElementById('workMode').value;
+    if (mode === 'practice' && task.answered) {
+      showFeedbackForTask(task);
+      document.getElementById('submitBtn').style.display = 'none';
+      document.getElementById('nextBtn').style.display = 'inline-block';
+    } else {
+      document.getElementById('submitBtn').style.display = 'inline-block';
+      document.getElementById('nextBtn').style.display = 'none';
+    }
+  }
+
+  function updateTaskInputFormat() {
+    renderCurrentTask();
+  }
+
+  function submitCurrentAnswer() {
+    if (!sessionActive) return;
+
+    const task = sessionTasks[currentIndex];
+    const useRoot = document.getElementById('useRootFormat').checked;
+    const userUnit = document.getElementById(`input_unit`).value;
+    
+    let userValInBase = 0;
+    let answerString = "";
+
+    if (useRoot) {
+      const coeff = parseFloat(document.getElementById(`input_val_coeff`).value) || 1;
+      const underRoot = parseFloat(document.getElementById(`input_val_root`).value);
+
+      if (isNaN(underRoot)) {
+        alert('Kérlek add meg a gyök alatti értéket!');
+        return;
+      }
+
+      answerString = `${coeff !== 1 ? coeff : ''}√${underRoot} ${userUnit}`;
+      let evaluated = coeff * Math.sqrt(underRoot);
+      userValInBase = evaluated * lengthUnits[userUnit];
+      task.userAnswer = { coeff, root: underRoot, unit: userUnit, string: answerString };
+    } else {
+      const userVal = parseFloat(document.getElementById(`input_val`).value);
+      if (isNaN(userVal)) {
+        alert('Kérlek add meg a számértéket!');
+        return;
+      }
+      answerString = `${userVal} ${userUnit}`;
+      userValInBase = userVal * lengthUnits[userUnit];
+      task.userAnswer = { val: userVal, unit: userUnit, string: answerString };
+    }
+
+    let targetValInBase = task.solutionRaw.exact * lengthUnits[task.solutionRaw.unit];
+    let isCorrect = Math.abs(userValInBase - targetValInBase) <= 0.15;
+
+    task.answered = true;
+    task.isCorrect = isCorrect;
+
+    const mode = document.getElementById('workMode').value;
+
+    if (mode === 'practice') {
+      showFeedbackForTask(task);
+      document.getElementById('submitBtn').style.display = 'none';
+      document.getElementById('nextBtn').style.display = 'inline-block';
+    } else {
+      if (currentIndex < sessionTasks.length - 1) {
+        currentIndex++;
+        renderCurrentTask();
+      } else {
+        openHistoryModal();
+      }
+    }
+  }
+
+  function nextTask() {
+    if (currentIndex < sessionTasks.length - 1) {
+      currentIndex++;
+      renderCurrentTask();
+    } else {
+      openHistoryModal();
+    }
+  }
+
+  function showFeedbackForTask(task) {
+    const fb = document.getElementById('feedback');
+    if (task.isCorrect) {
+      fb.className = 'feedback success';
+      fb.innerHTML = `<strong>Helyes válasz! 🎉</strong><div class="solution-steps"><strong>Részletes levezetés:</strong><br>${task.steps}</div>`;
+    } else {
+      fb.className = 'feedback error';
+      fb.innerHTML = `<strong>Helytelen válasz. 💡</strong><div class="solution-steps"><strong>Részletes levezetés / Megoldás:</strong><br>${task.steps}</div>`;
+    }
+  }
+
+  function openHistoryModal() {
+    const studentName = document.getElementById('studentName').value || 'Tanuló';
+    document.getElementById('modalStudentName').innerText = `${studentName} - Eredmények áttekintése`;
+
+    const total = sessionTasks.length;
+    const correctCount = sessionTasks.filter(t => t.isCorrect).length;
+    const percentage = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+    const gradeInfo = calculateGrade(percentage);
+
+    const summaryContainer = document.getElementById('summaryContainer');
+    summaryContainer.innerHTML = `
+      <div class="summary-box">
+        <h3>Eredmény összesítő</h3>
+        <p>Helyes válaszok: <strong>${correctCount} / ${total}</strong> (${percentage}%)</p>
+        <p>Osztályzat: <strong style="font-size: 1.2rem; color: var(--primary);">${gradeInfo.text} (${gradeInfo.mark})</strong></p>
+      </div>
+    `;
+
+    const container = document.getElementById('historyListContainer');
+    let tableHtml = `
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Feladat</th>
+            <th>Megadott válasz</th>
+            <th>Eredmény</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    sessionTasks.forEach((item) => {
+      let ansText = item.userAnswer ? item.userAnswer.string : 'Nincs válasz';
+      tableHtml += `
+        <tr>
+          <td>${item.id}</td>
+          <td>${item.text}</td>
+          <td>${ansText}</td>
+          <td class="${item.isCorrect ? 'tag-success' : 'tag-error'}">
+            ${item.isCorrect ? 'Helyes' : 'Hibás'}
+          </td>
+        </tr>
+      `;
+    });
+
+    tableHtml += '</tbody></table>';
+    container.innerHTML = tableHtml;
+
+    document.getElementById('historyModal').style.display = 'flex';
+  }
+
+  function calculateGrade(pct) {
+    if (pct >= 90) return { text: 'Kitűnő', mark: 1 };
+    if (pct >= 75) return { mark: 2, text: 'Dicséretes' };
+    if (pct >= 51) return { mark: 3, text: 'Jó' };
+    if (pct >= 30) return { mark: 4, text: 'Elégséges' };
+    return { mark: 5, text: 'Elégtelen' };
+  }
+
+  function closeHistoryModal() {
+    document.getElementById('historyModal').style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
